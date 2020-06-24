@@ -163,3 +163,8 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 ```
 
 Bất cứ khi nào dữ liệu về user thay đổi, callback onChange() sẽ được gọi và UI sẽ được cập nhật.
+
+Nếu bạn sử dụng quen thuộc các thư viện khác cũng có chức năng quan sát dữ liệu, thì bạn nhận ra rằng chúng ta không cần phải tạm dừng lắng nghe dữ liệu 1 cách thủ công trong
+callback `onStop()` của Fragment. Điều này là không cần thiết vì LiveData là 1 lifecycle aware, tức là nó sẽ không gọi `onChange()` trừ khi fragment đang ở trạng thái hoạt động; nó sẽ nhận thông báo thay đổi ở `onStart()` nhưng `onStop()` thì không. LiveData cũng tự động xóa các observer khi fragment bị hủy, tức `onDestroy()` được gọi.
+
+Chúng ta không thêm bất kỳ logic xử lý nào khi cấu hình thay đổi, ví dụ như khi quay màn hình. `UserProfileViewModel` tự động khôi phục khi cấu hình thay đổi, vì vậy ngay sau fragment được tạo, nó sẽ nhận được cùng 1 thể hiện của ViewModel, và callback được gọi ngay lập tức sử dụng dữ liệu hiện tại. Vì ViewModel tồn tại lâu hơn các View nên bạn không nên đưa tham chiếu của View vào ViewModel. Để biết thêm thông tin về vòng đời của ViewModel xem thêm [tại đây](https://developer.android.com/topic/libraries/architecture/viewmodel#lifecycle).
