@@ -52,3 +52,28 @@ Giả sử chúng tôi xây dựng 1 ứng dụng hiển thị thông tin của 
 * Tổng quan
 Để bắt đầu, bạn hãy quan sát lược đồ sau để thấy được các mô-đun trong ứng dụng tương tác với nhau như thế nào.
 
+![](https://developer.android.com/topic/libraries/architecture/images/final-architecture.png)
+
+Lưu ý rằng mỗi thành phần chỉ phụ thuộc vào 1 thành phần cấp dưới. Ví dụ, activities và fragments chỉ phụ thuộc vào ViewModel. Repositories là thành phần duy nhất phụ thuộc vào nhiều thành phần khác. Ở đây nó phụ thuộc vào dữ liệu remote và local.
+
+Thiết kế này phù hợp với trải nghiệm người dùng. Bất kể khi nào người dùng quay trở lại ứng dụng sau một vài phút hoặc vài ngày, họ ngay lập tức vẫn xem được thống tin vì nó đã được lưu trữ ở local. Nếu dữ liệu này cũ, repository sẽ cập nhật lại dữ liệu.
+
+* Xây dựng giao diện người dùng
+Giao diện bao gồm 1 fragment, UserProfileFragment, layout tưng ứng của nó là user_profile_layout.xml
+
+Về phần model sẽ nắm giữ dữ liệu theo luồng sau:
+- User ID: định danh của user, đây là 1 cách tốt để truyền thông tin giữa fragment và fragment thông qua arguments. Nếu hệ điều hành Android hủy tiến trình đang chạy, thông tin
+này vẫn sẽ được lưu giữ, vì vậy việc sử dụng ID là hợp lý
+- User object: 1 class nắm giữ thông tin user
+
+Chúng tôi sử dụng UserProfileViewModel, kế thừa từ ViewModel - 1 thành phần thuộc Android Jetpack, để nắm giữ thông tin.
+
+1 đối tượng ViewModel cung cấp dữ liệu cho 1 thành phần UI nhất định, như fragment hoặc activity và chứa dữ liệu xử lý logic nghiệp vụ để kết nối với model. Ví dụ, ViewModel có
+thể gọi các thành phần khác để tải dữ liệu và nó có thể là cầu nối chuyển tiếp yêu cầu của người dùng thay đổi dữ liệu. ViewModel không biết đến các thành phần của UI, vì vậy
+nó không bị ảnh hưởng khi cấu hình thay đổi như khi thiết bị xoay màn hình.
+
+Bây giờ chúng tôi sẽ định nghĩa các tệp tin:
+- user_profile.xml: layout hiển thị giao diện
+- UserProfileFragment: UI điều khiển hiển thị dữ liệu
+- UserProfileView
+
