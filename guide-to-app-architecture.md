@@ -81,7 +81,8 @@ Bây giờ chúng tôi sẽ định nghĩa các tệp tin:
 
 Hãy quan sát code bên dưới:
 
-UserProfileViewModel
+`UserProfileViewModel`
+
 ```java
 class UserProfileViewModel : ViewModel() {
    val userId : String = TODO()
@@ -89,3 +90,76 @@ class UserProfileViewModel : ViewModel() {
 }
 ```
 
+`UserProfileFragment`
+```java
+class UserProfileFragment : Fragment() {
+      // To use the viewModels() extension function, include
+      // "androidx.fragment:fragment-ktx:latest-version" in your app
+      // module's build.gradle file.
+      private val viewModel: UserProfileViewModel by viewModels()
+
+      override fun onCreateView(
+          inflater: LayoutInflater, container: ViewGroup?,
+          savedInstanceState: Bundle?
+      ): View {
+          return inflater.inflate(R.layout.main_fragment, container, false)
+      }
+   }
+```
+
+Bây giờ, chúng ta đã có các mô-đun trên, vậy chúng sẽ kết hợp với nhau như thế nào? Sau tất cả, khi trường user được thiếp lập trong `UserProfileViewModel`. Chúng tôi cần 1 cách 
+để thông báo cho UI.
+
+Để có được `usser`, ViewModel cần truy cập vào argument của Fragment. Chúng ta hoặc có thể truyền nó qua từ fragment, hoặc tốt hơn, sử dụng SaveState module.
+
+```
+// UserProfileViewModel
+class UserProfileViewModel(
+   savedStateHandle: SavedStateHandle
+) : ViewModel() {
+   val userId : String = savedStateHandle["uid"] ?:
+          throw IllegalArgumentException("missing user id")
+   val user : User = TODO()
+}
+
+// UserProfileFragment
+private val viewModel: UserProfileViewModel by viewModels(
+   factoryProducer = { SavedStateVMFactory(this) }
+   ...
+)
+```
+
+Bây giờ, chúng ta cần thông báo cho UI biết khi đối tượng user có dữ liệu. Hãy để LiveData giúp bạn làm điều này.
+
+LiveData nắm giữ dữ liệu có thể quan sát được. LiveData tuân theo vòng đời của các thành phần như activity, fragment, service, bao gồm cả việc dọn dẹp logic để tránh rò rỉ bộ
+nhớ.
+
+Để kết hợp LiveData vào ứng dụng của chúng ta, chúng ta sẽ thay đổi kiểu dữ liệu của biến trong UserProfileViewModel thành `LiveData<User>`. Bây gờ UserProflieFragment sẽ được
+thông báo khi có dữ liệu thay đổi. Hơn nữa, LiveData là lifecycle aware, nó sẽ tự động xóa tham chiếu nếu trong thời gian dài không sử dụng.
+
+`UserProfileViewModel`
+
+```
+class UserProfileViewModel(
+   savedStateHandle: SavedStateHandle
+) : ViewModel() {
+   val userId : String = savedStateHandle["uid"] ?:
+          throw IllegalArgumentException("missing user id")
+   val user : LiveData<User> = TODO()
+}
+```
+
+Bây giờ, hãy thay đổi UserProfileFragment để lắng nghe dữ liệu thay đổi:
+
+`UserProfileFragment`
+
+```
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+   super.onViewCreated(view, savedInstanceState)
+   viewModel.user.observe(viewLifecycleOwner) {
+       // update UI
+   }
+}
+```
+
+Bất cứ khi nào dữ liệu về user thay đổi, callback onChange() sẽ được gọi và UI sẽ được cập nhật.
