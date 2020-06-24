@@ -80,10 +80,10 @@ Bây giờ chúng tôi sẽ định nghĩa các tệp tin:
 Hãy quan sát code bên dưới:
 
 UserProfileViewModel
-<```
+```java
 class UserProfileViewModel : ViewModel() {
    val userId : String = TODO()
    val user : User = TODO()
 }
-```>
+```
 
