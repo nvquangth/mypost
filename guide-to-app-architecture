@@ -1,0 +1,17 @@
+Hướng dẫn này bao gồm các bài luyện tập và những lời khuyên hữu ích về kiến trúc để xây dựng một ứng dụng chất lượng cao. Ở đây chúng tôi giả định rằng bạn đã có những 
+kiến thức cơ bản về Android Framework. Nếu bạn là người mới làm quen với Android, vui lòng xem trước các hướng dẫn tại đây để có thể nắm được những khái niệm được đề cập tới
+trong hướng dẫn này.
+
+### Trải nghiệm người dùng
+Trong hầu hết các trường hợp, các ứng dụng dạng desktop đều có 1 điểm đơn bắt đầu từ desktop hoặc 1 trình khởi chạy, sau đó sẽ chạy như 1 khối. Với các ứng dụng Android thì lại
+khác, nó có nhiều cấu trúc phức tạp hơn. Một ứng dụng Android điển hình bao gồm nhiều thành phần như acitivities, fragments, services, content provider và broadcast recievers.
+
+Hầu hết bạn sẽ khai báo các thành phần này trong tệp tin app manifest của ứng dụng. Sau đó hệ điều hành Android sẽ sử dụng tệp tin này để quyết định việc tích hợp các thành phần
+trên thành 1 ứng dụng. Giả sử ứng dụng của bạn được tạo nên bởi nhiều thành phần và người dùng sẽ tương tác với nhiều ứng dụng trong 1 khoảng thời gian ngắn, ứng dụng cần tương
+thích với nhiều kịch bản sử dụng cũng như các tác vụ khác nhau.
+
+Ví dụ, hãy xem những gì xảy ra khi người dùng chia sẻ 1 hình ảnh lên mạng xã hội như Facebook:
+1. Ứng dụng sẽ cần dùng đến camera, hệ điều hành Android sẽ mở ứng dụng camera để xử lý yêu cầu. Tại thời điểm này, người dùng đã rời khỏi ứng dụng mạng xã hội, nhưng trải nghiệm của họ vẫn
+đảm bảo liên tục.
+2. Ứng dụng cần gọi đến 1 thành phần khác, như cần lựa chọn 1 tệp tin, và có thể cũng sẽ mở 1 ứng dụng khác.
+3. Cuối dùng người dùng quay lại mạng xã hội và chia sẻ ảnh
