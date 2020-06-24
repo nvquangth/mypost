@@ -75,5 +75,15 @@ nó không bị ảnh hưởng khi cấu hình thay đổi như khi thiết bị
 Bây giờ chúng tôi sẽ định nghĩa các tệp tin:
 - user_profile.xml: layout hiển thị giao diện
 - UserProfileFragment: UI điều khiển hiển thị dữ liệu
-- UserProfileView
+- UserProfileViewModel: chịu trách nhiệm chuẩn bị dữ liệu cho View và nhận tương tác từ người dùng
+
+Hãy quan sát code bên dưới:
+
+UserProfileViewModel
+<```
+class UserProfileViewModel : ViewModel() {
+   val userId : String = TODO()
+   val user : User = TODO()
+}
+```>
 
