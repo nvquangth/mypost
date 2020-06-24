@@ -45,3 +45,10 @@ Nguyên lý này bắt nguyền từ những lý do sau:
 Bằng việc phân rõ trách nhiệm trên ứng dụng của bạn, làm nó trở nên dễ dàng kiểm thử và nhất quán hớn
 
 ### Đề xuất kiến trúc ứng dụng
+Trong phần này, chúng tôi sẽ trình bày cách xây dựng ứng dụng sử dụng các Architecture Componet với 1 use case đầy đủ.
+
+Giả sử chúng tôi xây dựng 1 ứng dụng hiển thị thông tin của người dùng. Chúng tôi sử dụng backend server cung cấp REST API để lấy thông tin người dùng.
+
+* Tổng quan
+Để bắt đầu, bạn hãy quan sát lược đồ sau để thấy được các mô-đun trong ứng dụng tương tác với nhau như thế nào.
+
